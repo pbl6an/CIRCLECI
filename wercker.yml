@@ -1,0 +1,123 @@
+box: node:14
+
+build:
+  steps:
+    - script:
+      name: set yarn cache
+      code: |
+        export YARN_CACHE=$WERCKER_CACHE_DIR/yarn
+
+    - script:
+      name: hello
+      code: |
+        echo "It's dummy job"
+
+deploy:
+  steps:
+    - add-ssh-key:
+      keyname: GH_SSH_KEY
+      host: github.com
+    - add-to-known_hosts:
+      hostname: github.com
+      fingerprint: SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8
+
+    - script:
+      name: set yarn cache
+      code: |
+        export YARN_CACHE=$WERCKER_CACHE_DIR/yarn
+
+    - script:
+      name: install 
+      code: |
+        yarn --frozen-lockfile
+        yarn bootstrap
+
+    - script:
+      name: Setup git user
+      code: |
+        git config --global user.email yosuke.kurami@gmail.com
+        git config --global user.name Quramy
+
+    - script:
+      name: Login npm
+      code: |
+        echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > ~/.npmrc
+        npm whoami
+
+    - script:
+      name: deploy
+      code: |
+        yarn deploy
+        yarn publish:npm
+
+release_patch:
+  steps:
+    - script:
+      name: workaround fix detached
+      code: |
+        git checkout $WERCKER_GIT_BRANCH || git checkout -b $WERCKER_GIT_BRANCH
+
+    - add-ssh-key:
+      keyname: GH_SSH_KEY
+      host: github.com
+    - add-to-known_hosts:
+      hostname: github.com
+      fingerprint: SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8
+
+    - script:
+      name: set yarn cache
+      code: |
+        export YARN_CACHE=$WERCKER_CACHE_DIR/yarn
+
+    - script:
+      name: install 
+      code: |
+        yarn --frozen-lockfile
+        yarn bootstrap
+
+    - script:
+      name: Setup git user
+      code: |
+        git config --global user.email yosuke.kurami@gmail.com
+        git config --global user.name Quramy
+
+    - script:
+      name: Patch release
+      code: |
+        yarn run lerna version patch --yes
+
+release_minor:
+  steps:
+    - script:
+      name: workaround fix detached
+      code: |
+        git checkout $WERCKER_GIT_BRANCH || git checkout -b $WERCKER_GIT_BRANCH
+
+    - add-ssh-key:
+      keyname: GH_SSH_KEY
+      host: github.com
+    - add-to-known_hosts:
+      hostname: github.com
+      fingerprint: SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8
+
+    - script:
+      name: set yarn cache
+      code: |
+        export YARN_CACHE=$WERCKER_CACHE_DIR/yarn
+
+    - script:
+      name: install 
+      code: |
+        yarn --frozen-lockfile
+        yarn bootstrap
+
+    - script:
+      name: Setup git user
+      code: |
+        git config --global user.email yosuke.kurami@gmail.com
+        git config --global user.name Quramy
+
+    - script:
+      name: Minor release
+      code: |
+        yarn run lerna version minor --yes

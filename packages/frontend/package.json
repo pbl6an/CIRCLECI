@@ -1,0 +1,69 @@
+{
+  "private": true,
+  "name": "frontend",
+  "version": "1.3.2",
+  "main": "lib/index.js",
+  "scripts": {
+    "pretest": "cpx \"src/components/**/*.css\" \"lib/components\"",
+    "test": "npm run storycap",
+    "build": "webpack --mode=production --env=prod",
+    "prepublish": "tsc -p tsconfig.build.json",
+    "tcm": "tcm src",
+    "start": "webpack-dev-server --mode=development",
+    "storybook": "start-storybook -s public,test -p 9001",
+    "predeploy.bk": "npm run build",
+    "deploy.bk": "gh-pages -d public",
+    "deploy": "echo \"skip gh pages deploy\"",
+    "storycap": "storycap -o \"../../regression/__screenshots__\" --serverCmd \"npm run storybook -- --ci\" --serverTimeout 60000 http://localhost:9001"
+  },
+  "keywords": [
+    "reg"
+  ],
+  "author": {
+    "name": "Quramy",
+    "email": "yosuke.kurami@gmail.com"
+  },
+  "repository": "https://github.com/reg-viz/gh-app.git",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@storybook/addon-actions": "^5.1.11",
+    "@storybook/addon-storysource": "^5.1.11",
+    "@storybook/addon-viewport": "^5.1.11",
+    "@storybook/react": "^5.1.11",
+    "@types/classnames": "^2.2.9",
+    "@types/lodash": "^4.14.71",
+    "@types/node": "^12.7.1",
+    "@types/react": "^16.0.41",
+    "@types/react-dom": "^16.0.6",
+    "@types/storybook__addon-actions": "^3.4.3",
+    "@types/storybook__react": "^4.0.2",
+    "autoprefixer": "^7.1.2",
+    "babel-loader": "^8.0.6",
+    "cpx": "^1.5.0",
+    "css-loader": "^3.2.0",
+    "css-modules-require-hook": "^4.0.6",
+    "dotenv-webpack": "^1.5.4",
+    "gh-pages": "^2.1.1",
+    "mini-css-extract-plugin": "^0.8.0",
+    "postcss-loader": "^3.0.0",
+    "storycap": "^2.3.4",
+    "style-loader": "^1.0.0",
+    "terser-webpack-plugin": "^1.4.1",
+    "ts-loader": "^6.0.4",
+    "typed-css-modules": "^0.3.0",
+    "typescript": "^3.5.3",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.8.0"
+  },
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "lodash": "^4.17.4",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "rxjs": "^5.5.10",
+    "semantic-ui-react": "^0.87.3",
+    "whatwg-fetch": "^2.0.3"
+  }
+}

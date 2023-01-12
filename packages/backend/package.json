@@ -1,0 +1,79 @@
+{
+  "private": true,
+  "name": "backend",
+  "version": "1.3.1",
+  "main": "dist/handler.js",
+  "scripts": {
+    "build:watch": "webpack --mode=development --watch",
+    "build:stg": "webpack --mode=production --config webpack.config.js",
+    "build:prod": "webpack --mode=production --config webpack.config.prod.js",
+    "start:server": "sls offline start",
+    "start": "run-p build:watch start:server",
+    "test": "jest",
+    "codegen": "apollo-codegen generate src/gql/*.graphql --target ts --output src/gql/_generated.ts --schema schema.json",
+    "prepublish": "tsc -p tsconfig.build.json",
+    "deploy:stg": "yarn build:stg && sls deploy --stage stg",
+    "deploy:prod": "/bin/bash ./deploy.sh",
+    "deploy": "yarn deploy:prod"
+  },
+  "keywords": [
+    "reg"
+  ],
+  "author": {
+    "name": "Quramy",
+    "email": "yosuke.kurami@gmail.com"
+  },
+  "repository": "https://github.com/reg-viz/gh-app.git",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^24.0.19",
+    "@types/jsonwebtoken": "^7.2.1",
+    "@types/node": "^12.7.1",
+    "@types/request-promise": "^4.1.35",
+    "apollo-codegen": "^0.13.2",
+    "dotenv-webpack": "^1.5.4",
+    "graphql-tag": "^2.4.2",
+    "jest": "^24.9.0",
+    "raw-loader": "^3.1.0",
+    "reg-gh-app-interface": "^1.3.0",
+    "serverless": "^3.0.0",
+    "serverless-offline": "^5.10.1",
+    "ts-jest": "^24.1.0",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.3",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^7.4.1",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.build.json",
+        "diagnostics": false
+      }
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "testMatch": [
+      "**/__tests__/*.(ts|tsx)",
+      "**/*.test.(ts|tsx)"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "_old/.*",
+      "examples/.*",
+      "\\.d\\.ts$",
+      "lib/.*"
+    ]
+  }
+}
