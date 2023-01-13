@@ -1,0 +1,26 @@
+name: build
+
+on:
+  push:
+    branches:
+    - main
+  #   tags:
+  #   - '!*'
+  # pull_request:
+
+env:
+  TURBO_TEAM: k6
+  TURBO_TOKEN: orXUG7C0upy1PfeztANQZEBp
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2.2.2
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm test
