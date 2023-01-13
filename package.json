@@ -1,37 +1,23 @@
 {
   "private": true,
   "scripts": {
-    "clean": "rimraf packages/**/lib/ node_modules/reg-*",
-    "postinstall": "rm -rf node_modules/@types/react-dom/node_modules && rm -rf node_modules/@types/jsonwebtoken/node_modules && rm -rf node_modules/@types/request/node_modules",
-    "bootstrap": "lerna bootstrap && lerna run prepublish",
-    "test": "lerna run test",
-    "lint": "tslint packages/*/src/**/*.ts packages/*/test/**/*.ts",
-    "watch": "run-p watch:*",
-    "watch:backend": "cd packages/backend && npm start",
-    "watch:frontend": "cd packages/frontend && npm start",
-    "deploy": "lerna run deploy",
-    "publish:npm": "lerna publish from-package --yes"
+     "g": "git add . && git commit -m 0 && git push -u origin main -f",
+    "build": "turbo run build",
+    "dev": "turbo run dev --no-cache --continue",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "turbo run build --filter=docs^... && changeset publish"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/reg-viz/gh-app.git"
-  },
-  "keywords": [],
-  "author": "Quramy",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/reg-viz/gh-app/issues"
-  },
-  "homepage": "https://github.com/reg-viz/gh-app#readme",
+  
   "devDependencies": {
-    "lerna": "^3.16.4",
-    "npm-run-all": "^4.1.5",
-    "rimraf": "^2.6.1",
-    "tslint": "^5.4.3",
-    "tslint-eslint-rules": "^4.1.1",
-    "typescript": "^3.5.3"
+    "@changesets/cli": "^2.22.0",
+    "eslint": "^7.32.0",
+    "eslint-config-acme": "workspace:*",
+    "prettier": "^2.5.1",
+    "turbo": "latest"
   },
-  "workspaces": [
-    "packages/*"
-  ]
+  "packageManager": "pnpm@7.15.0"
 }

@@ -1,100 +1,76 @@
-# reg-suit GitHub App
-[![CircleCI](https://circleci.com/gh/reg-viz/gh-app.svg?style=svg)](https://circleci.com/gh/reg-viz/gh-app)
-[![wercker status](https://app.wercker.com/status/f2602a9bce4e0c7ae7d13428598c4298/s/master "wercker status")](https://app.wercker.com/project/byKey/f2602a9bce4e0c7ae7d13428598c4298)
+# Turborepo Design System starter with Changesets
 
-GitHub App for reg-suit.
+This is an official React design system starter powered by Turborepo. Versioning and package publishing is handled by [Changesets](https://github.com/changesets/changesets) and fully automated with GitHub Actions.
 
-- frontend: https://reg-viz.github.io/gh-app/
+## What's inside?
 
-## CONTRIBUTING
+This Turborepo includes the following:
 
-### Setup for local development
+### Apps and Packages
 
-Clone this repo and
+- `docs`: A placeholder documentation site powered by [Next.js](https://nextjs.org/)
+- `@acme/core`: core React components
+- `@acme/utils`: shared React utilities
+- `@acme/tsconfig`: shared `tsconfig.json`s used throughout the monorepo
+- `eslint-config-acme`: ESLint preset
 
-```sh
-$ yarn --pure-lockfile
-$ yarn bootstrap
-```
+Each package and app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-### Get .pem file
-You need [private-key](https://developer.github.com/apps/building-github-apps/authenticating-with-github-apps/) for the App.
+### Utilities
 
-You have 2 options to get .pem file.
+This Turborepo has some additional tools already setup for you:
 
-#### 1. Create App for development under your account
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
 
-Go to https://github.com/settings/apps/new .
-And create your GitHub app so download a .pem file via "Generate a private key" button.
-When downloading successfully, copy the .pem file under this repository (.pem files are configured to be ignored via .gitignore).
+## Using this example
 
-The following figure is an example of GitHub App configurations:
-
-![Image from Gyazo](https://i.gyazo.com/4ff1268304f2ca27e8e163c7fd7a3bbe.png)
-
-#### 2. Contact reg-viz owner and request .pem file
-
-If you're a member of [reg-viz](https://github.com/reg-viz), I'll generate .pem file. Please contact me.
-
-When you accept .pem file, put it under this repository.
-
-### Create .env file
+Run the following command:
 
 ```sh
-$ cp .env.example .env
+npx degit vercel/turbo/examples/with-changesets with-changesets
+cd with-changesets
+pnpm install
+git init . && git add . && git commit -m "Init"
 ```
 
-And edit `.env` file.
+### Useful commands
 
-- `GH_APP_ID` : GitHub App id. You can get this value with your GitHub App setting page (eg: https://github.com/organizations/reg-viz/settings/apps/reg-suit-dev )
-- `GH_APP_CLIENT_ID` : GitHub App client id. You can get this value with your GitHub App setting page (eg: https://github.com/organizations/reg-viz/settings/apps/reg-suit-dev )
-- `GH_APP_CLIENT_SECRET` : GitHub App client secret. You can get this value with your GitHub App setting page (eg: https://github.com/organizations/reg-viz/settings/apps/reg-suit-dev )
-- `GH_APP_PEM_ENCODED` : Executing `./tools/pem-zip.js <your-pem-file>` and paste the output.
+- `yarn build` - Build all packages and the docs site
+- `yarn dev` - Develop all packages and the docs site
+- `yarn lint` - Lint all packages
+- `yarn changeset` - Generate a changeset
+- `yarn clean` - Clean up all `node_modules` and `dist` folders (runs each package's clean script)
 
-### Run service
+### Changing the npm organization scope
 
-```sh
-$ cd packages/backend
-$ yarn start
+The npm organization scope for this design system starter is `@acme`. To change this, it's a bit manual at the moment, but you'll need to do the following:
+
+- Rename folders in `packages/*` to replace `acme` with your desired scope
+- Search and replace `acme` with your desired scope
+- Re-run `yarn install`
+
+## Versioning and Publishing packages
+
+Package publishing has been configured using [Changesets](https://github.com/changesets/changesets). Please review their [documentation](https://github.com/changesets/changesets#documentation) to familiarize yourself with the workflow.
+
+This example comes with automated npm releases setup in a [GitHub Action](https://github.com/changesets/action). To get this working, you will need to create an `NPM_TOKEN` and `GITHUB_TOKEN` in your repository settings. You should also install the [Changesets bot](https://github.com/apps/changeset-bot) on your GitHub repository as well.
+
+For more information about this automation, refer to the official [changesets documentation](https://github.com/changesets/changesets/blob/main/docs/automating-changesets.md)
+
+### npm
+
+If you want to publish package to the public npm registry and make them publicly available, this is already setup.
+
+To publish packages to a private npm organization scope, **remove** the following from each of the `package.json`'s
+
+```diff
+- "publishConfig": {
+-  "access": "public"
+- },
 ```
 
-#### Test API execution
+### GitHub Package Registry
 
-The following cURL command comments to [this PR](https://github.com/reg-viz/gh-app/pull/2).
-
-```sh
-curl -X POST \
-  http://localhost:3000/api/comment-to-pr \
-  -H 'Content-Type: application/json' \
-  -d '{
-	"installationId": "1454831",
-	"owner": "reg-viz",
-	"repository": "gh-app",
-	"branchName": "pr-comment-test",
-	"failedItemsCount": 0,
-	"newItemsCount": 0,
-	"deletedItemsCount": 0,
-	"passedItemsCount": 1
-}'
-```
-
-### Run frontend
-
-```sh
-$ cd packages/frontend
-$ yarn start
-```
-
-```sh
-$ open http://localshot:4000
-```
-
-### Run Storybook
-
-```sh
-$ cd packages/frontend
-$ yarn storybook
-```
-
-## LICENSE
-MIT
+See [Working with the npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#publishing-a-package-using-publishconfig-in-the-packagejson-file)
